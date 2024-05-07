@@ -6,7 +6,10 @@ let AssignmentSchema = Schema({
     id: Number,
     dateDeRendu: Date,
     nom: String,
-    rendu: Boolean
+    rendu: Boolean,
+    auteur: { type: Schema.Types.ObjectId, ref: 'Auteur', required: true },
+    matiere: { type: Schema.Types.ObjectId, ref: 'Matiere', required: true },
+
 });
 
 AssignmentSchema.plugin(mongoosePaginate);
