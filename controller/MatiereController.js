@@ -4,6 +4,8 @@ const multer = require('multer');
 const Matiere = require('../model/matiere');
 const express = require('express');
 
+// Create a new router instance
+const router = express.Router();
 
 // Configuration de Cloudinary
 cloudinary.config({
@@ -39,28 +41,22 @@ router.post('/createMatiere', upload.fields([{ name: 'image', maxCount: 1 }, { n
         const imageResult = await streamUpload(req.files.image[0]); // Upload de l'image
         const imageProfResult = await streamUpload(req.files.imageProf[0]); // Upload de l'imageProf
 
-        // // Création de la matière avec les URLs des images
-        // const newMatiere = new Matiere({
-        //     nom: req.body.nom,
-        //     image: imageResult.url,
-        //     nomProf: req.body.nomProf,
-        //     imageProf: imageProfResult.url
-        // });
+        // Création de la matière avec les URLs des images
+        const newMatiere = new Matiere({
+            nom: req.body.nom,
+            image: imageResult.url,
+            nomProf: req.body.nomProf,
+            imageProf: imageProfResult.url
+        });
 
-        // // Insertion de la matière dans la base de données
-        // const insertedMatiere = await newMatiere.save();
-        // res.status(201).json(insertedMatiere);
+        // Insertion de la matière dans la base de données
+        const insertedMatiere = await newMatiere.save();
+        res.status(201).json(insertedMatiere);
 
-        console.log(imageResult);
-        console.log(imageProfResult);
     } catch (error) {
         console.error('Erreur lors de la création de la matière : ', error);
         res.status(500).json({ error: 'Erreur lors de la création de la matière' });
     }
 });
-
-const express = require('express');
-const router = express.Router();
-
 
 module.exports = router;
