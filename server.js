@@ -3,9 +3,14 @@ let app = express();
 let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
 var AuthController = require('./controller/AuthController');
+const MatiereController = require('./controller/MatiereController');
+const multer = require('multer');
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 // mongoose.set('debug', true);
 
 // remplacer toute cette chaine par l'URI de connexion à votre propre base dans le cloud s
@@ -59,6 +64,8 @@ app.route(prefix + '/assignments/:id')
 
 
 app.use(prefix + '/auth', AuthController);
+
+app.use(prefix + '/matiere', MatiereController);
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
