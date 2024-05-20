@@ -9,9 +9,8 @@ let AssignmentSchema = Schema({
     rendu: Boolean,
     auteur: { type: Schema.Types.ObjectId, ref: 'Auteur', required: true },
     matiere: { type: Schema.Types.ObjectId, ref: 'Matiere', required: true },
-    note: { type: Schema.Types.ObjectId, ref: 'Note', required: true },
-    remarques: String
-
+    note: { type: Number, min: 0, max: 20, default: null },
+    remarques: { type:String, default: null}
 });
 
 AssignmentSchema.plugin(mongoosePaginate);

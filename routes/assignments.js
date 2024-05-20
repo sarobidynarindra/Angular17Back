@@ -1,4 +1,6 @@
 let Assignment = require('../model/assignment');
+let Auteur = require('../model/auteur');
+let Matiere = require('../model/matiere');
 
 // Récupérer tous les assignments (GET)
 /*
@@ -51,17 +53,20 @@ function getAssignment(req, res){
 // Ajout d'un assignment (POST)
 function postAssignment(req, res){
     let assignment = new Assignment();
-    assignment.id = req.body.id;
+    //assignment.id = req.body.id;
     assignment.nom = req.body.nom;
     assignment.dateDeRendu = req.body.dateDeRendu;
-    assignment.rendu = req.body.rendu;
+    assignment.rendu = false;
+    assignment.auteur=req.body.auteurId;
+    assignment.matiere=req.body.matiereId;
 
     console.log("POST assignment reçu :");
     console.log(assignment)
 
     assignment.save( (err) => {
         if(err){
-            res.send('cant post assignment ', err);
+            return res.status(400).send('cant post assignment');
+            //res.send(' ', err);
         }
         res.json({ message: `${assignment.nom} saved!`})
     })
