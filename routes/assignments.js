@@ -1,6 +1,6 @@
 let Assignment = require('../model/assignment');
-let Auteur = require('../model/auteur');
-let Matiere = require('../model/matiere');
+let auteur = require('../model/auteur');
+let matiere = require('../model/matiere');
 
 // Récupérer tous les assignments (GET)
 /*
@@ -52,13 +52,32 @@ function getAssignment(req, res){
 
 // Ajout d'un assignment (POST)
 function postAssignment(req, res){
+    auteur.findOne({ _id: req.body.auteur }, (err, auteur) => {
+   
+        if (err) {
+          return res.status(500).send({ message: err });
+        }
+    
+        if (!auteur) {
+          return res.status(404).send({ message: "auteur not found" });
+        }
+    
+        matiere.findOne({ _id: req.body.matiere }, (err, matiere) => {
+          if (err) {
+            return res.status(500).send({ message: err });
+          }
+    
+          if (!matiere) {
+            return res.status(404).send({ message: "Matiere not found" });
+          }
+    
     let assignment = new Assignment();
     //assignment.id = req.body.id;
     assignment.nom = req.body.nom;
     assignment.dateDeRendu = req.body.dateDeRendu;
     assignment.rendu = false;
-    assignment.auteur=req.body.auteurId;
-    assignment.matiere=req.body.matiereId;
+    assignment.auteur=auteur._id;
+    assignment.matiere=matiere._id;
 
     console.log("POST assignment reçu :");
     console.log(assignment)
@@ -69,9 +88,11 @@ function postAssignment(req, res){
             //res.send(' ', err);
         }
         res.json({ message: `${assignment.nom} saved!`})
-    })
+    });
+});
+});
 }
-
+    
 // Update d'un assignment (PUT)
 function updateAssignment(req, res) {
     console.log("UPDATE recu assignment : ");
