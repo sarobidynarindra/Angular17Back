@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 let assignment = require('./routes/assignments');
 var AuthController = require('./controller/AuthController');
 const MatiereController = require('./controller/MatiereController');
+const AuteurController = require('./controller/AuteurController');
 const multer = require('multer');
 
 let mongoose = require('mongoose');
@@ -66,6 +67,7 @@ app.route(prefix + '/assignments/:id')
 app.use(prefix + '/auth', AuthController);
 
 app.use(prefix + '/matiere', MatiereController);
+app.use(prefix + '/auteur', AuteurController);
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
