@@ -59,4 +59,22 @@ router.post('/createMatiere', upload.fields([{ name: 'image', maxCount: 1 }, { n
     }
 });
 
+router.get('/getAllMatiere', async (req, res) => {
+    let aggregateQuery = Matiere.aggregate();
+
+    Matiere.aggregatePaginate(
+        aggregateQuery, 
+        {
+            page: parseInt(req.query.page) || 1, 
+            limit: parseInt(req.query.limit) || 10
+        },
+        (err, data) => {
+            if(err){
+                res.send(err)
+            }
+    
+            res.send(data);
+        }
+    );
+});
 module.exports = router;
