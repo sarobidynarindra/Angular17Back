@@ -77,4 +77,14 @@ router.get('/getAllMatiere', async (req, res) => {
         }
     );
 });
+
+router.get('/deleteMatiere/:id', async (req, res) => {
+
+    Matiere.findByIdAndRemove(req.params.id, (err, matiere) => {
+        if (err) {
+            res.send(err);
+        }
+        res.json({message: `${matiere.nom} deleted`});
+    })
+});
 module.exports = router;
