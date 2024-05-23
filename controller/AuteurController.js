@@ -71,4 +71,13 @@ router.get('/getAllAuteur', async (req, res) => {
         }
     );
 });
+router.get('/deleteAuteur/:id', async (req, res) => {
+
+    Auteur.findByIdAndRemove(req.params.id, (err, auteur) => {
+        if (err) {
+            res.send(err);
+        }
+        res.json({message: `${auteur.nom} deleted`});
+    })
+});
 module.exports = router;
