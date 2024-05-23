@@ -53,5 +53,22 @@ router.post('/createAuteur', upload.fields([{ name: 'photo', maxCount: 1 }]), as
         res.status(500).json({ error: 'Erreur lors de la création Auteur' });
     }
 });
+router.get('/getAllAuteur', async (req, res) => {
+    let aggregateQuery = Auteur.aggregate();
 
+    Auteur.aggregatePaginate(
+        aggregateQuery, 
+        {
+            page: parseInt(req.query.page) || 1, 
+            limit: parseInt(req.query.limit) || 10
+        },
+        (err, data) => {
+            if(err){
+                res.send(err)
+            }
+    
+            res.send(data);
+        }
+    );
+});
 module.exports = router;
