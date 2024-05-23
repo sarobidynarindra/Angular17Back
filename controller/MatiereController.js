@@ -78,7 +78,7 @@ router.get('/getAllMatiere', async (req, res) => {
     );
 });
 
-router.get('/deleteMatiere/:id', async (req, res) => {
+router.delete('/deleteMatiere/:id', async (req, res) => {
 
     Matiere.findByIdAndRemove(req.params.id, (err, matiere) => {
         if (err) {

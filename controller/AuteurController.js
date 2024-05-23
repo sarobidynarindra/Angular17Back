@@ -71,7 +71,7 @@ router.get('/getAllAuteur', async (req, res) => {
         }
     );
 });
-router.get('/deleteAuteur/:id', async (req, res) => {
+router.delete('/deleteAuteur/:id', async (req, res) => {
 
     Auteur.findByIdAndRemove(req.params.id, (err, auteur) => {
         if (err) {
