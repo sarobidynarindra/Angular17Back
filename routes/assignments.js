@@ -65,7 +65,18 @@ module.exports = {
 // Récupérer un assignment par son id (GET)
 function getAssignment(req, res) {
     let assignmentId = req.params.id;
-    Assignment.findById(assignmentId, (err, assignment) => {
+    Assignment.findById(assignmentId)
+    .populate({
+        path: 'Auteur',
+        model: 'auteur',
+        select: 'nom'
+    }) 
+    .populate({
+        path: 'Matiere',
+        model: 'matiere',
+        select: 'nom'
+    })
+    .exec((err, assignment) => {
         if (err) { res.send(err) }
         res.json(assignment);
     })
