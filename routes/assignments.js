@@ -164,19 +164,24 @@ function postAssignment(req, res) {
 
 // Update d'un assignment (PUT)
 function updateAssignment(req, res) {
-    console.log("UPDATE recu assignment : ");
+    console.log("UPDATE received assignment : ");
     console.log(req.body);
-    Assignment.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, assignment) => {
+
+    const updateFields = {
+        nom: req.body.nom,
+        dateDeRendu: req.body.dateDeRendu,
+        note: req.body.note,
+        remarques: req.body.remarques
+    };
+
+    Assignment.findByIdAndUpdate(req.body._id, { $set: updateFields }, { new: true }, (err, assignment) => {
         if (err) {
             console.log(err);
-            res.send(err)
+            res.status(500).send(err);
         } else {
-            res.json({ message: 'updated' })
+            res.json({ message: 'Assignment updated successfully!', assignment });
         }
-
-        // console.log('updated ', assignment)
     });
-
 }
 
 // suppression d'un assignment (DELETE)
