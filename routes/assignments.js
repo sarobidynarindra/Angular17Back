@@ -245,6 +245,57 @@ function getAssignmentByRenduFalse(req, res) {
     });
 }
 
+// get assignemnt by rendu avec rendu true 
+function getAssignmentByRenduTrue(req, res) {
+    let assignmentId = mongoose.Types.ObjectId(req.params.id);
+
+    let aggregateQuery = Assignment.aggregate([
+        {
+            $match: {
+                _id: assignmentId,
+                rendu: true
+            }
+        },
+        {
+            $lookup: {
+                from: 'auteurs',
+                localField: 'auteur',
+                foreignField: '_id',
+                as: 'auteurs'
+            }
+        },
+        {
+            $lookup: {
+                from: 'matieres',
+                localField: 'matiere',
+                foreignField: '_id',
+                as: 'matieres'
+            }
+        },
+        {
+            $unwind: {
+                path: '$auteurs',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $unwind: {
+                path: '$matieres',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+    ]);
+
+    aggregateQuery.exec((err, assignment) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        if (!assignment || assignment.length === 0) {
+            return res.status(404).send({ message: 'Assignment not found' });
+        }
+        res.json(assignment[0]);
+    });
+}
 
 
-module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment, getAssignmentByRendu };
+module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment, getAssignmentByRenduFalse, getAssignmentByRenduTrue };
