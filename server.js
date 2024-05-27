@@ -57,8 +57,12 @@ app.route(prefix + '/assignments')
   .post(assignment.postAssignment)
   .put(assignment.updateAssignment)
   .get(assignment.getAssignments)
-  .get(assignment.getAssignmentByRenduFalse)
-  .get(assignment.getAssignmentByRenduTrue);
+
+app.route(prefix + '/assignments/getAssignmentsByRenduFalse')
+  .get(assignment.getAssignmentsByRenduFalse)
+
+app.route(prefix + '/assignments/getAssignmentsByRenduTrue')
+  .get(assignment.getAssignmentsByRenduTrue);
 
 
 app.route(prefix + '/assignments/:id')
