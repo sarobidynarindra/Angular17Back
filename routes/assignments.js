@@ -171,7 +171,8 @@ function updateAssignment(req, res) {
         nom: req.body.nom,
         dateDeRendu: req.body.dateDeRendu,
         note: req.body.note,
-        remarques: req.body.remarques
+        remarques: req.body.remarques,
+        rendu: req.body.note !== null && req.body.note !== 0 // Set rendu to true if note is not null and not 0
     };
 
     Assignment.findByIdAndUpdate(req.body._id, { $set: updateFields }, { new: true }, (err, assignment) => {
@@ -183,6 +184,8 @@ function updateAssignment(req, res) {
         }
     });
 }
+
+
 
 // suppression d'un assignment (DELETE)
 // l'id est bien le _id de mongoDB
