@@ -1,6 +1,7 @@
 let Assignment = require('../model/assignment');
 let auteur = require('../model/auteur');
 let matiere = require('../model/matiere');
+const mongoose = require('mongoose');
 
 // Récupérer tous les assignments (GET)
 /*
@@ -64,10 +65,6 @@ module.exports = {
 };
 
 
-
-// Récupérer un assignment par son id (GET)
-const mongoose = require('mongoose');
-
 function getAssignment(req, res) {
     let assignmentId = mongoose.Types.ObjectId(req.params.id);
 
@@ -115,9 +112,6 @@ function getAssignment(req, res) {
         res.json(assignment[0]);
     });
 }
-
-module.exports = { getAssignment };
-
 
 // Ajout d'un assignment (POST)
 function postAssignment(req, res) {
@@ -199,6 +193,58 @@ function deleteAssignment(req, res) {
     })
 }
 
+//get assignement by rendu avec rendu false
+function getAssignmentByRenduFalse(req, res) {
+    let assignmentId = mongoose.Types.ObjectId(req.params.id);
+
+    let aggregateQuery = Assignment.aggregate([
+        {
+            $match: {
+                _id: assignmentId,
+                rendu: false
+            }
+        },
+        {
+            $lookup: {
+                from: 'auteurs',
+                localField: 'auteur',
+                foreignField: '_id',
+                as: 'auteurs'
+            }
+        },
+        {
+            $lookup: {
+                from: 'matieres',
+                localField: 'matiere',
+                foreignField: '_id',
+                as: 'matieres'
+            }
+        },
+        {
+            $unwind: {
+                path: '$auteurs',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $unwind: {
+                path: '$matieres',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+    ]);
+
+    aggregateQuery.exec((err, assignment) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        if (!assignment || assignment.length === 0) {
+            return res.status(404).send({ message: 'Assignment not found' });
+        }
+        res.json(assignment[0]);
+    });
+}
 
 
-module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment };
+
+module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment, getAssignmentByRendu };
