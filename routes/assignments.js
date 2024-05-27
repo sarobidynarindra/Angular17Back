@@ -179,8 +179,6 @@ function updateAssignment(req, res) {
     });
 }
 
-
-
 // suppression d'un assignment (DELETE)
 // l'id est bien le _id de mongoDB
 function deleteAssignment(req, res) {
@@ -201,34 +199,34 @@ function getAssignmentsByRenduFalse(req, res) {
                 rendu: false
             }
         },
-        // {
-        //     $lookup: {
-        //         from: 'auteurs',
-        //         localField: 'auteur',
-        //         foreignField: '_id',
-        //         as: 'auteurs'
-        //     }
-        // },
-        // {
-        //     $lookup: {
-        //         from: 'matieres',
-        //         localField: 'matiere',
-        //         foreignField: '_id',
-        //         as: 'matieres'
-        //     }
-        // },
-        // {
-        //     $unwind: {
-        //         path: '$auteurs',
-        //         preserveNullAndEmptyArrays: true
-        //     }
-        // },
-        // {
-        //     $unwind: {
-        //         path: '$matieres',
-        //         preserveNullAndEmptyArrays: true
-        //     }
-        // }
+        {
+            $lookup: {
+                from: 'auteurs',
+                localField: 'auteur',
+                foreignField: '_id',
+                as: 'auteurs'
+            }
+        },
+        {
+            $lookup: {
+                from: 'matieres',
+                localField: 'matiere',
+                foreignField: '_id',
+                as: 'matieres'
+            }
+        },
+        {
+            $unwind: {
+                path: '$auteurs',
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $unwind: {
+                path: '$matieres',
+                preserveNullAndEmptyArrays: true
+            }
+        }
     ]).exec((err, assignments) => {
         if (err) {
             return res.status(500).send(err);
