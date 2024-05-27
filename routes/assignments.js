@@ -247,7 +247,9 @@ function getAssignmentsByRenduFalse(req, res) {
 
 // Get assignments where rendu is true
 function getAssignmentsByRenduTrue(req, res) {
-    Assignment.aggregate([
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    let aggregateQuery = Assignment.aggregate([
         {
             $match: {
                 rendu: true
@@ -281,12 +283,20 @@ function getAssignmentsByRenduTrue(req, res) {
                 preserveNullAndEmptyArrays: true
             }
         }
-    ]).exec((err, assignments) => {
-        if (err) {
-            return res.status(500).send(err);
+    ]);
+    Assignment.aggregatePaginate(
+        aggregateQuery,
+        {
+            page: page,
+            limit: limit
+        },
+        (err, assignments) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            res.send(assignments);
         }
-        res.json(assignments);
-    });
+    );
 }
 
 
