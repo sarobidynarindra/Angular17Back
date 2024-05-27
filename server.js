@@ -56,7 +56,9 @@ const prefix = '/api';
 app.route(prefix + '/assignments')
   .post(assignment.postAssignment)
   .put(assignment.updateAssignment)
-  .get(assignment.getAssignments);
+  .get(assignment.getAssignments)
+  .get(assignment.getAssignmentByRenduFalse)
+  .get(assignment.getAssignmentByRenduTrue);
 
 
 app.route(prefix + '/assignments/:id')
