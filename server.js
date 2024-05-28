@@ -64,6 +64,9 @@ app.route(prefix + '/assignments/getAssignmentsByRenduFalse')
 app.route(prefix + '/assignments/getAssignmentsByRenduTrue')
   .get(assignment.getAssignmentsByRenduTrue);
 
+app.route(prefix + '/assignments/updateAssignmentNoteRemarque')
+  .put(assignment.updateAssignmentNoteRemarque);
+
 
 app.route(prefix + '/assignments/:id')
   .get(assignment.getAssignment)
