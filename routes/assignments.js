@@ -178,6 +178,25 @@ function updateAssignment(req, res) {
         }
     });
 }
+function updateAssignmentNoteRemarque(req, res) {
+    console.log("UPDATE received assignment : ");
+    console.log(req.body);
+
+    const updateFields = {
+        note: req.body.note,
+        remarques: req.body.remarques,
+        rendu: req.body.note !== null && req.body.note !== 0
+    };
+
+    Assignment.findByIdAndUpdate(req.body._id, { $set: updateFields }, { new: true }, (err, assignment) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.json({ message: 'Assignment updated successfully!', assignment });
+        }
+    });
+}
 
 // suppression d'un assignment (DELETE)
 // l'id est bien le _id de mongoDB
@@ -308,5 +327,6 @@ module.exports = {
     updateAssignment,
     deleteAssignment,
     getAssignmentsByRenduFalse,
-    getAssignmentsByRenduTrue
+    getAssignmentsByRenduTrue,
+    updateAssignmentNoteRemarque
 };
