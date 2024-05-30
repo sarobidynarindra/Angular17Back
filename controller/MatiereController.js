@@ -59,23 +59,17 @@ router.post('/createMatiere', upload.fields([{ name: 'image', maxCount: 1 }, { n
     }
 });
 
-router.get('/getAllMatiere', async (req, res) => {
+router.get('/getAllMatieres', async (req, res) => {
     let aggregateQuery = Matiere.aggregate();
+    let page = parseInt(req.query.page) || 1;
+    let limit = 5; // Limite de 5 matières par page
 
-    Matiere.aggregatePaginate(
-        aggregateQuery, 
-        {
-            page: parseInt(req.query.page) || 1, 
-            limit: parseInt(req.query.limit) || 10
-        },
-        (err, data) => {
-            if(err){
-                res.send(err)
-            }
-    
-            res.send(data);
+    Matiere.aggregatePaginate(aggregateQuery, { page, limit }, (err, data) => {
+        if (err) {
+            return res.status(500).send(err);
         }
-    );
+        res.send(data);
+    });
 });
 
 router.delete('/deleteMatiere/:id', async (req, res) => {
@@ -84,7 +78,7 @@ router.delete('/deleteMatiere/:id', async (req, res) => {
         if (err) {
             res.send(err);
         }
-        res.json({message: `${matiere.nom} deleted`});
+        res.json({ message: `${matiere.nom} deleted` });
     })
 });
 module.exports = router;
