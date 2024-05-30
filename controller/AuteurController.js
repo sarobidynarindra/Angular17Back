@@ -54,13 +54,35 @@ router.post('/createAuteur', upload.fields([{ name: 'photo', maxCount: 1 }]), as
     }
 });
 router.get('/getAllAuteur', async (req, res) => {
+    let page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
     let aggregateQuery = Auteur.aggregate();
 
     Auteur.aggregatePaginate(
         aggregateQuery, 
         {
-            page: parseInt(req.query.page) || 1, 
-            limit: parseInt(req.query.limit) || 10
+            page: page,
+            limit: limit
+        },
+        (err, data) => {
+            if(err){
+                res.send(err)
+            }
+    
+            res.send(data);
+        }
+    );
+});
+router.get('/getAllAuteurPagine', async (req, res) => {
+    let page = parseInt(req.query.page) || 1;
+    let limit = 5;
+    let aggregateQuery = Auteur.aggregate();
+
+    Auteur.aggregatePaginate(
+        aggregateQuery, 
+        {
+            page: page,
+            limit: limit
         },
         (err, data) => {
             if(err){
