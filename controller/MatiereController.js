@@ -71,6 +71,14 @@ router.get('/getAllMatieres', async (req, res) => {
         res.send(data);
     });
 });
+router.get('/getAllMatierewithoutPagination', async (req, res) => {
+    try {
+        let matieres = await Matiere.find();
+        res.send(matieres);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
 
 router.delete('/deleteMatiere/:id', async (req, res) => {
 
