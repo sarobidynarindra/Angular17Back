@@ -54,15 +54,14 @@ router.post('/createAuteur', upload.fields([{ name: 'photo', maxCount: 1 }]), as
     }
 });
 router.get('/getAllAuteur', async (req, res) => {
-    Auteur.find((err, auteurs) => {
+    Auteur.find((err, data) => {
         if(err){
             res.send(err)
         }
 
-        res.send(auteurs);
+        res.send(data);
     });
 });
-
 router.get('/getAllAuteurPagine', async (req, res) => {
     let page = parseInt(req.query.page) || 1;
     let limit = 5;
