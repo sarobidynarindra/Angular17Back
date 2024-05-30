@@ -155,7 +155,48 @@ function postAssignment(req, res) {
         });
     });
 }
+function postAssignmentDB(req, res) {
+    auteur.findOne({ _id: req.body.auteur }, (err, auteur) => {
 
+        if (err) {
+            return res.status(500).send({ message: err });
+        }
+
+        if (!auteur) {
+            return res.status(404).send({ message: "auteur not found" });
+        }
+
+        matiere.findOne({ _id: req.body.matiere }, (err, matiere) => {
+            if (err) {
+                return res.status(500).send({ message: err });
+            }
+
+            if (!matiere) {
+                return res.status(404).send({ message: "Matiere not found" });
+            }
+
+            let assignment = new Assignment();
+
+            assignment.nom = req.body.nom;
+            assignment.dateDeRendu = req.body.dateDeRendu;
+            assignment.rendu = req.body.rendu;
+            assignment.auteur = auteur._id;
+            assignment.matiere = matiere._id;
+            assignment.note = req.body.note;
+            assignment.remarques = req.body.remarques;
+            console.log("POST assignment reçu :");
+            console.log(assignment)
+
+            assignment.save((err) => {
+                if (err) {
+                    return res.status(400).send('cant post assignment');
+                    //res.send(' ', err);
+                }
+                res.json({ message: `${assignment.nom} saved!` })
+            });
+        });
+    });
+}
 // Update d'un assignment (PUT)
 function updateAssignment(req, res) {
     console.log("UPDATE received assignment : ");
@@ -328,5 +369,6 @@ module.exports = {
     deleteAssignment,
     getAssignmentsByRenduFalse,
     getAssignmentsByRenduTrue,
-    updateAssignmentNoteRemarque
+    updateAssignmentNoteRemarque,
+    postAssignmentDB
 };

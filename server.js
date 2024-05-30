@@ -78,6 +78,10 @@ app.use(prefix + '/auth', AuthController);
 app.use(prefix + '/matiere', MatiereController);
 app.use(prefix + '/auteur', AuteurController);
 
+
+app.route(prefix + '/assignments/postAssignmentDB')
+  .post(assignment.postAssignmentDB)
+
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
 console.log('Serveur démarré sur http://localhost:' + port);
