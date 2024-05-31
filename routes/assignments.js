@@ -156,32 +156,33 @@ function postAssignment(req, res) {
     });
 }
 function postAssignmentDB(req, res) {
+    console.log(req.body)
     auteur.findOne({ _id: req.body.auteur }, (err, auteur) => {
-
+        console.log(req.body.auteur, auteur, err);
         if (err) {
-            return res.status(500).send({ message: err });
+            return res.status(500).send({ message: req.body.dateDeRendu });
         }
 
-        if (!auteur) {
-            return res.status(404).send({ message: "auteur not found" });
-        }
+        // if (!auteur) {
+        //     return res.status(404).send({ message: "auteur tsita " });
+        // }
 
         matiere.findOne({ _id: req.body.matiere }, (err, matiere) => {
             if (err) {
                 return res.status(500).send({ message: err });
             }
 
-            if (!matiere) {
-                return res.status(404).send({ message: "Matiere not found" });
-            }
+            // if (!matiere) {
+            //     return res.status(404).send({ message: "Matiere not found" });
+            // }
 
             let assignment = new Assignment();
 
             assignment.nom = req.body.nom;
             assignment.dateDeRendu = req.body.dateDeRendu;
-            assignment.rendu = req.body.rendu;
-            assignment.auteur = auteur._id;
-            assignment.matiere = matiere._id;
+            assignment.rendu = false;
+            assignment.auteur = req.body.auteur;
+            assignment.matiere = req.body.matiere;
             assignment.note = req.body.note;
             assignment.remarques = req.body.remarques;
             console.log("POST assignment reçu :");
@@ -190,12 +191,12 @@ function postAssignmentDB(req, res) {
             assignment.save((err) => {
                 if (err) {
                     return res.status(400).send('cant post assignment');
-                    //res.send(' ', err);
                 }
-                res.json({ message: `${assignment.nom} saved!` })
+                res.json({ message: `${assignment} saved!` })
             });
         });
     });
+
 }
 // Update d'un assignment (PUT)
 function updateAssignment(req, res) {
